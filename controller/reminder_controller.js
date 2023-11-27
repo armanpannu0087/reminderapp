@@ -40,13 +40,48 @@ let remindersController = {
     res.render("reminder/edit", { reminderItem: searchResult });
   },
 
+  // update: (req, res) => {
+  //   // implementation here 👈
+    
+  // },
+
   update: (req, res) => {
-    // implementation here 👈
+    let reminderToUpdate = req.params.id;
+    let index = database.cindy.reminders.findIndex(function (reminder) {
+      return reminder.id == reminderToUpdate;
+    });
+  
+    if (index !== -1) {
+      database.cindy.reminders[index].title = req.body.title;
+      database.cindy.reminders[index].description = req.body.description;
+      database.cindy.reminders[index].completed = req.body.completed === 'true'; // assuming the completed value comes as a string
+  
+      res.redirect("/reminders");
+    } else {
+      res.render("reminder/index", { reminders: database.cindy.reminders });
+    }
   },
+  
+
+
+  // delete: (req, res) => {
+  //   // implementation here 👈
+  // },
 
   delete: (req, res) => {
-    // implementation here 👈
+    let reminderToDelete = req.params.id;
+    let index = database.cindy.reminders.findIndex(function (reminder) {
+      return reminder.id == reminderToDelete;
+    });
+  
+    if (index !== -1) {
+      database.cindy.reminders.splice(index, 1);
+      res.redirect("/reminders");
+    } else {
+      res.render("reminder/index", { reminders: database.cindy.reminders });
+    }
   },
+  
 };
 
 module.exports = remindersController;
